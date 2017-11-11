@@ -1,0 +1,199 @@
+CREATE TABLE `login1`.`tbl_user` (
+  `user_id` BIGINT NULL AUTO_INCREMENT,
+  `user_name` VARCHAR(45) NULL,
+  `user_username` VARCHAR(45) NULL,
+  `user_password` VARCHAR(45) NULL,
+  PRIMARY KEY (`user_id`));
+
+
+CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
+    IN p_name VARCHAR(255),
+    IN p_username VARCHAR(255),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+    if ( select exists (select 1 from tbl_user where user_username = p_username) ) THEN
+     
+        select 'Username Exists !!';
+     
+    ELSE
+     
+        insert into tbl_user
+        (
+            user_name,
+            user_username,
+            user_password
+        )
+        values
+        (
+            p_name,
+            p_username,
+            p_password
+        );
+     
+    END IF;
+
+
+
+
+DELIMITER $$
+CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `sp_validateLogin`(
+IN p_username VARCHAR(255)
+)
+BEGIN
+    select * from tbl_user where user_username = p_username;
+END$$
+DELIMITER ;
+
+
+//roadsDB
+
+CREATE TABLE `roadsDB` ( `road_id` int ,
+	`road_name` varchar(255),
+	`cars` int DEFAULT 0,
+	`bikes` int DEFAULT 0,
+	`others` int DEFAULT 0,
+	`trees` int DEFAULT 0,
+	`aqi` int DEFAULT 0,
+	PRIMARY KEY (`road_id`)
+);
+
+
+
+create table connect_info(connect_id integer,node1 integer,node2 integer,road_length numeric(7,4),poll_level numeric(7,4),aqi numeric(7,4),green_density numeric(7,4),weight numeric(7,4),primary key(connect_id),foreign key(
+
+
+
+ create table connect_info(connect_id integer,node1 integer,node2 integer,road_length numeric(7,4),aqi integer,cars integer,bikes integer,heavy integer,others integer,poll_level numeric(7,4),green_index integer,weight numeric(7,4),primary key(connect_id),foreign key(node1) references node_info(node),foreign key(node2) references node_info(node));
+	
+
+//AQI percent Update
+
+update connect_info
+   SET aqi_perc = CASE
+                   when aqi > 300 then '20'
+                   when aqi > 200 then '15'
+                   when aqi > 150 then '10'
+                   when aqi > 100 then '7'
+                   when aqi > 50 then '5'
+                   else '0'
+   END
+
+//AQI Trigger
+
+CREATE OR REPLACE DEFINER=`root`@`localhost` TRIGGER aqi_trigger AFTER UPDATE ON connect_info
+FOR EACH ROW
+BEGIN
+  IF NEW.aqi > 300 THEN
+        UPDATE connect_info SET aqi_perc=20;
+      ELSEIF NEW.aqi > 200 THEN
+        UPDATE connect_info SET aqi_perc=15;
+      ELSEIF NEW.aqi > 150 THEN
+       UPDATE connect_info SET aqi_perc=10;
+      ELSEIF NEW.aqi >100 THEN
+       UPDATE connect_info SET aqi_perc=7;
+      ELSEIF NEW.aqi >50 THEN
+        UPDATE connect_info SET aqi_perc=5;
+      ELSE
+        UPDATE connect_info SET aqi_perc=0;
+  END IF;
+END;
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createuser`(
+    IN p_name VARCHAR(255),
+    IN p_username VARCHAR(255),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+    if ( select exists (select 1 from tbl_user where user_username = p_username) ) THEN
+
+        select 'Username Exists !!';
+
+    ELSE
+
+        insert into tbl_user
+        (
+            user_name,
+            user_username,
+            user_password
+        )
+        values
+        (
+            p_name,
+            p_username,
+            p_password
+        );
+
+    END IF;
+END
+
+
+//Update AQI
+
+
+CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `sp_upaqi`(
+    IN p_aqi int)
+    BEGIN
+        update connect_info
+        set aqi = p_aqi;
+
+        IF P_aqi > 300 THEN
+               UPDATE connect_info SET aqi_perc=20;
+        ELSEIF p_aqi > 200 THEN
+               UPDATE connect_info SET aqi_perc=15;
+        ELSEIF p_aqi > 150 THEN
+               UPDATE connect_info SET aqi_perc=10;
+        ELSEIF p_aqi >100 THEN
+               UPDATE connect_info SET aqi_perc=7;
+        ELSEIF p_aqi >50 THEN
+               UPDATE connect_info SET aqi_perc=5;
+        ELSE
+               UPDATE connect_info SET aqi_perc=0;
+        END IF;
+
+        update connect_info set poll_level = 50 + aqi_perc + (cars*0.5) + (bikes*0.75) + (heavy*1) + (others*0.75) - (green_index/10);
+        update connect_info set weight = poll_level + road_length;
+
+    END;
+
+
+
+
+//DISPLAY AQI
+
+CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `sp_dispaqi`(
+    OUT p_daqi int)
+    BEGIN
+        select aqi as p_daqi from connect_info where connect_id =1;
+    END;
+
+
+
+//UPDATE TREE INDEX
+
+CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `sp_uptree`(
+    IN p_node1 int,
+    IN p_node2 int,
+    IN p_index int)
+    BEGIN
+        update connect_info set green_index=p_index where node1=p_node1 && node2=p_node2;
+        update connect_info set poll_level = 50 + aqi_perc + (cars*0.5) + (bikes*0.75) + (heavy*1) + (others*0.75) - (green_index/10);
+        update connect_info set weight = poll_level + road_length;
+
+    END;
+
+
+
+
+
+'''cursorx = connection.cursor()
+statement = "update connect_info set %s = %s + 1 where (road_name in (%s)) and (node1 in (%s)) and (node2 in (%s))" %placeholders
+dat2 = (type,type,_paths,_path,_path)
+cursorx.execute(statement,dat2)
+data = cursorx.fetchall()
+cursorx.execute("update connect_info set poll_level = 50 + aqi_perc + (cars*0.5) + (bikes*0.75) + (heavy*1) + (others*0.75) - (green_index/10)")
+cursorx.execute("update connect_info set weight = poll_level + road_length")'''

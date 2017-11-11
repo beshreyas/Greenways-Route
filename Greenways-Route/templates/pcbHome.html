@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Greenways Route App</title>
+
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/dropdown.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <nav>
+            <ul class="lead">
+                <li role="presentation" class="active"><a href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">Greenways Route App</h3>
+    </div>
+
+    <div class="jumbotron" style=" float:left ">
+        <h2>Update the AQI</h2>
+        <img src="../static/img/ProjectMap.jpg" alt="Map" align="middle"width="500" height="500"></img>
+    </div>
+
+    <!--
+     <div class="jumbotron">
+        <form action="#">
+            <h1>Select the road</h1>
+            <p class="lead"></p>
+                <select name="road">
+                <div class="dropdown">
+                    <button class="dropbtn">Dropdown</button>
+                        <div class="dropdown-content">
+                        <option value="volvo">Volvo XC90</option>
+                          <option value="saab">Saab 95</option>
+                        <option value="mercedes">Mercedes SLK</option>
+                        </div>
+                </div>
+                </select>
+                <input type="submit" value="Submit">
+            </p>
+        </form>
+    </div>
+
+    -->
+
+
+
+
+    <section class="jumbotron">
+        <h1>CURRENT AQI VALUE</h1>
+        <p> <h1>{{ variable }}</h1>
+    </section>
+    <section class="jumbotron">
+        <form class="form-horizontal" method="post" action="/updateAQI">
+            <fieldset>
+
+                <!-- Form Name -->
+
+                <!-- Text input-->
+                <h2> Menu</h2>
+
+                <!-- Textarea -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="txtPost">Update the AQI</label>
+                    <div class="col-md-4">
+                        <input class="form-control" id="aqi" name="inputaqi" type="number"></input>
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="singlebutton"></label>
+                    <div class="col-md-4">
+                        <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Update" />
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+    </section>
+
+
+    <footer class="footer">
+        <p>&copy;Greenways 2017</p>
+    </footer>
+
+</div>
+</body>
+
+</html>

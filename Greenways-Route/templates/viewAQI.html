@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Greenways Route App</title>
+
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src = "../static/js/jquery-3.2.1.js"></script>
+    <script src="../static/js/colorchange.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <nav>
+            <ul class="lead">
+                <li role="presentation" class="active"><a href="index">Home</a>
+                </li>
+                <li role="presentation" class="active"><a href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <h2 style="color:green">Greenways Route App</h2>
+    </div>
+
+     <div class="jumbotron">
+        <h2 align="center">The Air Quality Index of this locality is</h2>
+        <p><h1 align="center" data-color={{ variable }}>{{ variable }}</h1>
+
+        <div class="jumbotron">
+            <p class="lead"></p>
+            <p><a class="btn btn-lg btn-success" href="/" role="button">Home</a>
+            </p>
+        </div>
+
+    </div>
+
+
+    <footer class="footer">
+        <p>&copy;Greenways 2017</p>
+    </footer>
+
+</div>
+</body>
+
+</html>
+
+
